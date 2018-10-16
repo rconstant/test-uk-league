@@ -36,6 +36,7 @@ class ViewListener
             }
 
             $response = new Response($this->serializer->serialize($result, 'json'), $statusCode);
+            $response->headers->set('Content-Type', 'application/json');
             $event->setResponse($response);
         }
 

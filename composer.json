@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "symfony/browser-kit": "*",
         "symfony/dotenv": "*",
         "symfony/phpunit-bridge": "*",
         "symfony/var-dumper": "*",

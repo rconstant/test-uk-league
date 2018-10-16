@@ -28,6 +28,7 @@ class ExceptionListener
         }
         $content = json_encode($message);
         $response = new Response($content, $statusCode);
+        $response->headers->set('Content-Type', 'application/json');
         $event->setResponse($response);
     }
 

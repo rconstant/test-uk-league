@@ -41,8 +41,9 @@ class League implements LeagueInterface
      */
     private $teams;
 
-    public function __construct()
+    public function __construct(?string $name = null)
     {
+        $this->name = $name;
         $this->teams = new ArrayCollection();
     }
 

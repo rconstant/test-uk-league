@@ -46,6 +46,13 @@ class Team implements TeamInterface
      */
     private $league;
 
+    public function __construct(?string $name = null, ?League $league = null, ?string $strip = null)
+    {
+        $this->name = $name;
+        $this->league = $league;
+        $this->strip = $strip;
+    }
+
     /**
      * @return string
      */
