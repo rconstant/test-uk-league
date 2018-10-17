@@ -2,71 +2,108 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class TeamControllerTest extends WebTestCase
+class TeamControllerTest extends AbstractControllerTest
 {
-    public function testCreateTeamValid()
-    {
-        $client = static::createClient();
-        $data = [
-            'name' => 'Test',
-            'strip' => 'red',
-            'league' => 1
-        ];
-        $client->request('POST', 'teams', [], [], ['Content-Type' => 'application/json'], json_encode($data));
-        $response = $client->getResponse();
+    private const URL_TEAM_CREATE = '/api/teams';
+    private const URL_TEAM_UPDATE = '/api/teams/1';
 
-        $this->assertEquals(201, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertJson($response->getContent());
+    private const DATA_CREATE_VALID_TEAM = [
+        'name' => 'Test',
+        'strip' => 'red',
+        'league' => 1
+    ];
+
+    private const DATA_CREATE_INVALID_TEAM = [
+        'name' => 'Test',
+        'strip' => 'pink',
+        'league' => 1
+    ];
+
+    private const DATA_UPDATE_VALID_TEAM = [
+        'name' => 'Test 2',
+        'strip' => 'green',
+        'league' => 2
+    ];
+
+    private const DATA_UPDATE_INVALID_TEAM = [
+        'name' => 'Test',
+        'strip' => 'pink',
+        'league' => 99
+    ];
+
+    public function testCreateTeamUnauthorized()
+    {
+        $response = parent::sendRequest('POST', self::URL_TEAM_CREATE, self::DATA_CREATE_VALID_TEAM);
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::MISSING_AUTHORIZATION_HEADER);
     }
 
-    public function testCreateTeamInvalid()
+    public function testCreateTeamBadToken()
     {
-        $client = static::createClient();
-        $data = [
-            'name' => 'Test',
-            'strip' => 'pink',
-            'league' => 1
-        ];
-        $client->request('POST', 'teams', [], [], ['Content-Type' => 'application/json'], json_encode($data));
-
-        $response = $client->getResponse();
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertJson($response->getContent());
+        $response = parent::sendRequest('POST', self::URL_TEAM_CREATE, self::DATA_CREATE_VALID_TEAM, [
+            parent::AUTHORIZATION_KEY => 'Bearer 123'
+        ]);
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::WRONG_NUMBER_SEGMENTS);
     }
 
-    public function testUpdateTeamValid()
+    public function testCreateTeamReturn201()
     {
-        $client = static::createClient();
-        $data = [
-            'name' => 'Test 2',
-            'strip' => 'green',
-            'league' => 2
-        ];
-        $client->request('PUT', 'teams/1', [], [], ['Content-Type' => 'application/json'], json_encode($data));
-        $response = $client->getResponse();
+        $response = parent::sendRequest('POST', self::URL_TEAM_CREATE, self::DATA_CREATE_VALID_TEAM, [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertJson($response->getContent());
+        parent::assertResponse($response, 201);
     }
 
-    public function testUpdateTeamInvalid()
+    public function testCreateTeamReturn400()
     {
-        $client = static::createClient();
-        $data = [
-            'name' => 'Test 2',
-            'strip' => 'green',
-            'league' => 99
-        ];
-        $client->request('PUT', 'teams/1', [], [], ['Content-Type' => 'application/json'], json_encode($data));
-        $response = $client->getResponse();
+        $response = parent::sendRequest('POST', self::URL_TEAM_CREATE, self::DATA_CREATE_INVALID_TEAM, [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertJson($response->getContent());
+        parent::assertResponse($response, 400);
+    }
+
+    public function testUpdateTeamUnauthorized()
+    {
+        $response = parent::sendRequest('PUT', self::URL_TEAM_UPDATE, self::DATA_UPDATE_VALID_TEAM);
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::MISSING_AUTHORIZATION_HEADER);
+    }
+
+    public function testUpdateTeamBadToken()
+    {
+       $response = parent::sendRequest('PUT', self::URL_TEAM_UPDATE, self::DATA_UPDATE_VALID_TEAM, [
+            parent::AUTHORIZATION_KEY => 'Bearer 123'
+        ]);
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::WRONG_NUMBER_SEGMENTS);
+    }
+
+    public function testUpdateTeamReturn200()
+    {
+        $response = parent::sendRequest('PUT', self::URL_TEAM_UPDATE, self::DATA_UPDATE_VALID_TEAM, [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
+
+        parent::assertResponse($response, 200);
+    }
+
+    public function testUpdateTeamWithNoDataReturn400()
+    {
+        $response = parent::sendRequest('PUT', self::URL_TEAM_UPDATE, [], [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
+        parent::assertResponse($response, 200);
+    }
+
+    public function testUpdateTeamReturn400()
+    {
+        $response = parent::sendRequest('PUT', self::URL_TEAM_UPDATE, self::DATA_UPDATE_INVALID_TEAM, [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
+
+        parent::assertResponse($response, 400);
     }
 }

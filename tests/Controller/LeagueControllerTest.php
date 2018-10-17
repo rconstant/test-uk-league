@@ -2,30 +2,47 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-
-class LeagueControllerTest extends WebTestCase
+class LeagueControllerTest extends AbstractControllerTest
 {
+    private const URL_LEAGUE_EXIST_GET_TEAMS = '/api/leagues/1/teams';
+    private const URL_LEAGUE_NOT_EXIST_GET_TEAMS = '/api/leagues/99/teams';
+    private const URL_LEAGUE_EXIST_DELETE = '/api/leagues/5';
+    private const URL_LEAGUE_NOT_EXIST_DELETE = '/api/leagues/99';
+
+    public function testGetTeamsUnauthorized()
+    {
+        $response = parent::sendRequest('GET', self::URL_LEAGUE_EXIST_GET_TEAMS);
+
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::MISSING_AUTHORIZATION_HEADER);
+    }
+
+    public function testGetTeamsBadToken()
+    {
+        $response = parent::sendRequest('GET', self::URL_LEAGUE_EXIST_GET_TEAMS, [], [
+            parent::AUTHORIZATION_KEY => 'Bearer 123'
+        ]);
+
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::WRONG_NUMBER_SEGMENTS);
+    }
+
     public function testGetTeamsReturn200()
     {
-        $client = static::createClient();
-        $client->request('GET', 'leagues/1/teams');
+        $response = parent::sendRequest('GET', self::URL_LEAGUE_EXIST_GET_TEAMS, [], [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
 
-        $response = $client->getResponse();
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertJson($response->getContent());
+        parent::assertResponse($response, 200);
     }
 
     public function testGetTeamsReturn404()
     {
-        $client = static::createClient();
-        $client->request('GET', 'leagues/99/teams');
+        $response = parent::sendRequest('GET', self::URL_LEAGUE_NOT_EXIST_GET_TEAMS, [], [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
 
-        $response = $client->getResponse();
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertJson($response->getContent());
+        parent::assertResponse($response, 404);
 
         $data = [
             'code' => 404,
@@ -35,24 +52,42 @@ class LeagueControllerTest extends WebTestCase
         $this->assertSame($data, json_decode($response->getContent(), true));
     }
 
-    public function testDeleteLeague()
+    public function testDeleteLeagueUnauthorized()
     {
-        $client = static::createClient();
-        $client->request('DELETE', 'leagues/5');
+        $response = parent::sendRequest('DELETE', self::URL_LEAGUE_EXIST_DELETE, []);
 
-        $response = $client->getResponse();
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::MISSING_AUTHORIZATION_HEADER);
+    }
+
+    public function testDeleteLeagueBadToken()
+    {
+        $response = parent::sendRequest('DELETE', self::URL_LEAGUE_EXIST_DELETE, [], [
+            parent::AUTHORIZATION_KEY => 'Bearer 123'
+        ]);
+
+        parent::assertResponse($response, 401);
+        $this->assertEquals(json_decode($response->getContent(), true), parent::WRONG_NUMBER_SEGMENTS);
+    }
+
+    public function testDeleteLeagueReturn204()
+    {
+        $response = parent::sendRequest('DELETE', self::URL_LEAGUE_EXIST_DELETE, [], [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
+
         $this->assertEquals(204, $response->getStatusCode());
+        $this->assertEmpty($response->getContent());
+
     }
 
     public function testDeleteLeagueReturn404()
     {
-        $client = static::createClient();
-        $client->request('DELETE', 'leagues/99');
+        $response = parent::sendRequest('DELETE', self::URL_LEAGUE_NOT_EXIST_DELETE, [], [
+            parent::AUTHORIZATION_KEY => 'Bearer ' . parent::getAccessToken()
+        ]);
 
-        $response = $client->getResponse();
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertTrue($response->headers->contains('Content-Type', 'application/json'));
-        $this->assertJson($response->getContent());
+        parent::assertResponse($response, 404);
 
         $data = [
             'code' => 404,
