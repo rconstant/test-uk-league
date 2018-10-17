@@ -12,6 +12,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
+/**
+ * Class JWTTokenAuthenticator
+ * @package App\Security\Guard
+ */
 class JWTTokenAuthenticator extends AbstractGuardAuthenticator
 {
     /**
@@ -24,21 +28,43 @@ class JWTTokenAuthenticator extends AbstractGuardAuthenticator
         $this->userProvider = $userProvider;
     }
 
+    /**
+     * @param Request                      $request
+     * @param AuthenticationException|null $authException
+     *
+     * @return JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new JsonResponse(['invalid_grant' => 'Missing access token'], 401);
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return bool
+     */
     public function supports(Request $request)
     {
         return true;
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return bool|mixed|null|string|string[]
+     */
     public function getCredentials(Request $request)
     {
         return $request->headers->has('Authorization') ? $request->headers->get('Authorization') : false;
     }
 
+    /**
+     * @param mixed                 $credentials
+     * @param UserProviderInterface $userProvider
+     *
+     * @return null|UserInterface
+     */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         if (empty($credentials)) {
@@ -70,21 +96,43 @@ class JWTTokenAuthenticator extends AbstractGuardAuthenticator
         throw new AuthenticationException('Unsupported token type in authorization header');
     }
 
+    /**
+     * @param mixed         $credentials
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
     public function checkCredentials($credentials, UserInterface $user)
     {
         return true;
     }
 
+    /**
+     * @param Request                 $request
+     * @param AuthenticationException $exception
+     *
+     * @return null|JsonResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         return new JsonResponse(['error' => 'authentication_failure', 'error_description' => $exception->getMessage()], 401);
     }
 
+    /**
+     * @param Request        $request
+     * @param TokenInterface $token
+     * @param string         $providerKey
+     *
+     * @return null|\Symfony\Component\HttpFoundation\Response
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         return null;
     }
 
+    /**
+     * @return bool
+     */
     public function supportsRememberMe()
     {
         return false;

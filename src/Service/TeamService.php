@@ -6,10 +6,15 @@ use Api\Exception\ApiException;
 use Api\Exception\ValidatorException;
 use App\Entity\Team;
 use App\Entity\TeamInterface;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * Class TeamService
+ * @package App\Service
+ */
 class TeamService
 {
     /**
@@ -56,7 +61,7 @@ class TeamService
             $this->em->persist($data);
             $this->em->flush();
         } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), $e->getCode());
+            throw new ApiException($e->getCode(), $e->getMessage());
         }
 
         return $data;
@@ -83,7 +88,7 @@ class TeamService
             $this->em->merge($entity);
             $this->em->flush();
         } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), $e->getCode());
+            throw new ApiException($e->getCode(), $e->getMessage());
         }
 
         return $entity;

@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Entity
  *
  * @ORM\Entity()
- * @ORM\Table()
+ * @ORM\Table(name="leagues")
  *
  * @UniqueEntity(fields={"id", "name"}, repositoryMethod="findByNameAndNotSame")
  */

@@ -4,6 +4,10 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * Interface LeagueInterface
+ * @package App\Entity
+ */
 interface LeagueInterface
 {
     /**

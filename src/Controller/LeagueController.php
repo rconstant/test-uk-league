@@ -23,6 +23,11 @@ class LeagueController extends AbstractController
      */
     private $leagueService;
 
+    /**
+     * LeagueController constructor.
+     *
+     * @param LeagueService $leagueService
+     */
     public function __construct(LeagueService $leagueService)
     {
         $this->leagueService = $leagueService;

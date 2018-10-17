@@ -8,6 +8,10 @@ use App\Entity\League;
 use App\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class LeagueService
+ * @package App\Service
+ */
 class LeagueService
 {
     /**
@@ -41,7 +45,7 @@ class LeagueService
             $this->em->remove($league);
             $this->em->flush();
         } catch (\Exception $e) {
-            throw new ApiException($e->getMessage(), $e->getCode());
+            throw new ApiException($e->getCode(), $e->getMessage());
         }
     }
 }

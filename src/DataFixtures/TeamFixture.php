@@ -8,6 +8,10 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * Class TeamFixture
+ * @package App\DataFixtures
+ */
 class TeamFixture extends Fixture implements DependentFixtureInterface
 {
     /**
@@ -25,6 +29,9 @@ class TeamFixture extends Fixture implements DependentFixtureInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function getDependencies()
     {
         return [

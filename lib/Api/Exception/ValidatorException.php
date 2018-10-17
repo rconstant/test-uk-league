@@ -5,10 +5,24 @@ namespace Api\Exception;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
+/**
+ * Class ValidatorException
+ * @package Api\Exception
+ */
 class ValidatorException extends ApiException
 {
+    /**
+     * @var ConstraintViolationListInterface
+     */
     private $constraintViolationList;
 
+    /**
+     * ValidatorException constructor.
+     *
+     * @param ConstraintViolationListInterface $constraintViolationList
+     * @param string                           $message
+     * @param int                              $code
+     */
     public function __construct(ConstraintViolationListInterface $constraintViolationList, $message = 'Validation failed', $code = 400)
     {
         parent::__construct($code, $message);
@@ -27,6 +41,11 @@ class ValidatorException extends ApiException
     }
 
 
+    /**
+     * @param ConstraintViolationInterface $constraintViolation
+     *
+     * @return array
+     */
     protected function constraintViolationToArray(ConstraintViolationInterface $constraintViolation)
     {
         $result = [

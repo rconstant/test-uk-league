@@ -2,6 +2,10 @@
 
 namespace App\Entity;
 
+/**
+ * Interface TeamInterface
+ * @package App\Entity
+ */
 interface TeamInterface
 {
     /**

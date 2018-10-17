@@ -4,6 +4,10 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Class LeagueRepository
+ * @package App\Repository
+ */
 class LeagueRepository extends EntityRepository
 {
     /**

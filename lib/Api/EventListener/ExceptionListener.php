@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class ExceptionListener
+ * @package Api\EventListener
+ */
 class ExceptionListener
 {
     public function onException(GetResponseForExceptionEvent $event)

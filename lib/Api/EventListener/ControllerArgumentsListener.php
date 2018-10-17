@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\Serializer\SerializerInterface;
 
+/**
+ * Class ControllerArgumentsListener
+ * @package Api\EventListener
+ */
 class ControllerArgumentsListener
 {
     /**
@@ -55,14 +59,14 @@ class ControllerArgumentsListener
     }
 
     /**
-     * @param $class
-     * @param $method
-     * @param $annotationName
+     * @param string $class
+     * @param string $method
+     * @param string $annotationName
      *
      * @return null|object
      * @throws \ReflectionException
      */
-    private function getMethodAnnotation($class, $method, $annotationName)
+    private function getMethodAnnotation(string $class, string $method, string $annotationName)
     {
         $reflectionMethod = new \ReflectionMethod($class, $method);
         return $this->annotationReader->getMethodAnnotation($reflectionMethod, $annotationName);
@@ -81,7 +85,14 @@ class ControllerArgumentsListener
         $request->request->set($resource->reference, $entity);
     }
 
-    private function deserialize($encodedData, $type, $source = null)
+    /**
+     * @param string $encodedData
+     * @param string $type
+     * @param null   $source
+     *
+     * @return object
+     */
+    private function deserialize(string $encodedData, string $type, $source = null)
     {
         $context = [];
         if (!is_null($source)) {

@@ -3,6 +3,10 @@ namespace App\Security\Response;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+/**
+ * Class JWTAuthenticationSuccessResponse
+ * @package App\Security\Response
+ */
 class JWTAuthenticationSuccessResponse extends JsonResponse
 {
     /**

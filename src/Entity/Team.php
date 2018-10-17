@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Entity
  *
  * @ORM\Entity(repositoryClass="App\Repository\TeamRepository")
- * @ORM\Table()
+ * @ORM\Table(name="teams")
  * @UniqueEntity(fields={"id", "name"}, repositoryMethod="findByNameAndNotSame")
  */
 class Team implements TeamInterface
@@ -38,6 +38,8 @@ class Team implements TeamInterface
 
     /**
      * @var LeagueInterface
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\League", inversedBy="teams")
      * @ORM\JoinColumns(

@@ -24,6 +24,11 @@ class TeamController extends AbstractController
      */
     private $teamService;
 
+    /**
+     * TeamController constructor.
+     *
+     * @param TeamService $teamService
+     */
     public function __construct(TeamService $teamService)
     {
         $this->teamService = $teamService;

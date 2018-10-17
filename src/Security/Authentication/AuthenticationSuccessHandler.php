@@ -9,6 +9,10 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 
+/**
+ * Class AuthenticationSuccessHandler
+ * @package App\Security\Authentication
+ */
 class AuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     /**

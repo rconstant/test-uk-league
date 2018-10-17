@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * Class User
+ * @package App\Entity
+ *
  * @ORM\Table(name="users")
  * @ORM\Entity
  */

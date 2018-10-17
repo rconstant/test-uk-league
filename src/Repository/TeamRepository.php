@@ -4,6 +4,10 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * Class TeamRepository
+ * @package App\Repository
+ */
 class TeamRepository extends EntityRepository
 {
     /**

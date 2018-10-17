@@ -5,6 +5,10 @@ namespace App\Security;
 use Firebase\JWT\JWT;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Class JWTManager
+ * @package App\Security
+ */
 class JWTManager
 {
     /**
