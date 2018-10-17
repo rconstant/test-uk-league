@@ -1,13 +1,35 @@
 security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        entity_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            guard:
+                authenticators:
+                    - App\Security\Guard\JWTTokenAuthenticator
+
         main:
-            anonymous: true
+            provider: entity_provider
+            stateless: true
+            json_login:
+                check_path:    /login
+                success_handler: App\Security\Authentication\AuthenticationSuccessHandler
+#        main:
+#            anonymous: true
 
             # activate different ways to authenticate
 
@@ -20,5 +42,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

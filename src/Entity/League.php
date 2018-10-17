@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table()
  *
- * @UniqueEntity(fields={"name"})
+ * @UniqueEntity(fields={"id", "name"}, repositoryMethod="findByNameAndNotSame")
  */
 class League implements LeagueInterface
 {

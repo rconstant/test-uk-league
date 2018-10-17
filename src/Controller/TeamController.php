@@ -15,7 +15,7 @@ use Api\Annotations\Resource as ApiResource;
  * Class TeamController
  * @package App\Controller
  *
- * @Route("/teams")
+ * @Route("/api/teams")
  */
 class TeamController extends AbstractController
 {

@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "doctrine/annotations": "^1.6",
+        "firebase/php-jwt": "^5.0",
         "jms/serializer-bundle": "^2.4",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/console": "*",

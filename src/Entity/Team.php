@@ -10,9 +10,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class Team
  * @package App\Entity
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\TeamRepository")
  * @ORM\Table()
- * @UniqueEntity(fields={"name"})
+ * @UniqueEntity(fields={"id", "name"}, repositoryMethod="findByNameAndNotSame")
  */
 class Team implements TeamInterface
 {

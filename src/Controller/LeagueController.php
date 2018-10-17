@@ -5,7 +5,6 @@ namespace App\Controller;
 use Api\Util\DefaultConstant;
 use App\Entity\League;
 use App\Service\LeagueService;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  * Class LeagueController
  * @package App\Controller
  *
- * @Route("/leagues")
+ * @Route("/api/leagues")
  */
 class LeagueController extends AbstractController
 {
